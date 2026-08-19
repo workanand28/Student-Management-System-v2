@@ -31,7 +31,7 @@ public class StudentController {
 
     @GetMapping("/students/{id}")
     public ResponseEntity<Student> getStudentById(
-            @PathVariable int id) {
+            @PathVariable String id) {
 
         Student student =
                 studentService.getStudentById(id);
@@ -59,7 +59,7 @@ public class StudentController {
 
     @PutMapping("/students/{id}")
     public ResponseEntity<Student> updateStudent(
-            @PathVariable int id,
+            @PathVariable String id,
             @RequestBody Student updatedStudent) {
 
         Student student =
@@ -77,7 +77,7 @@ public class StudentController {
 
     @DeleteMapping("/students/{id}")
     public ResponseEntity<Void> deleteStudent(
-            @PathVariable int id) {
+            @PathVariable String id) {
 
         boolean deleted =
                 studentService.deleteStudent(id);

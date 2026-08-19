@@ -8,13 +8,15 @@ public interface StudentService {
 
     List<Student> getAllStudents();
 
-    Student getStudentById(int id);
+    Student getStudentById(String id);
 
     List<Student> getStudentsByName(String name);
 
     Student createStudent(Student student);
 
-    Student updateStudent(int id, Student updatedStudent);
+    Student updateStudent(
+            String id,
+            Student updatedStudent);
 
-    boolean deleteStudent(int id);
+    boolean deleteStudent(String id);
 }

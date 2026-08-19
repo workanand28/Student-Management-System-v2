@@ -1,149 +1,79 @@
 package com.example.student_management.service;
 
 import com.example.student_management.model.Student;
+import com.example.student_management.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private List<Student> students = new ArrayList<>();
+    private final StudentRepository studentRepository;
 
-    public StudentServiceImpl() {
-
-        students.add(
-                new Student(
-                        1,
-                        "Anand",
-                        "anand@example.com",
-                        21,
-                        "IT"
-                )
-        );
-
-        students.add(
-                new Student(
-                        2,
-                        "Rahul",
-                        "rahul@example.com",
-                        22,
-                        "CSE"
-                )
-        );
-
-        students.add(
-                new Student(
-                        3,
-                        "Priya",
-                        "priya@example.com",
-                        20,
-                        "ECE"
-                )
-        );
-
-        students.add(
-                new Student(
-                        4,
-                        "Aman",
-                        "aman@example.com",
-                        21,
-                        "IT"
-                )
-        );
-
-        students.add(
-                new Student(
-                        5,
-                        "Neha",
-                        "neha@example.com",
-                        22,
-                        "CSE"
-                )
-        );
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     @Override
     public List<Student> getAllStudents() {
-        return students;
+
+        return studentRepository.findAll();
     }
 
     @Override
-    public Student getStudentById(int id) {
+    public Student getStudentById(String id) {
 
-        for (Student student : students) {
+        Optional<Student> student =
+                studentRepository.findById(id);
 
-            if (student.getId() == id) {
-                return student;
-            }
-        }
-
-        return null;
+        return student.orElse(null);
     }
 
     @Override
     public List<Student> getStudentsByName(String name) {
 
-        List<Student> result = new ArrayList<>();
-
-        for (Student student : students) {
-
-            if (student.getName().equalsIgnoreCase(name)) {
-                result.add(student);
-            }
-        }
-
-        return result;
+        return studentRepository.findByNameIgnoreCase(name);
     }
 
     @Override
     public Student createStudent(Student student) {
 
-        students.add(student);
-
-        return student;
+        return studentRepository.save(student);
     }
 
     @Override
     public Student updateStudent(
-            int id,
+            String id,
             Student updatedStudent) {
 
-        for (Student student : students) {
+        Optional<Student> existingStudent =
+                studentRepository.findById(id);
 
-            if (student.getId() == id) {
-
-                student.setName(updatedStudent.getName());
-                student.setEmail(updatedStudent.getEmail());
-                student.setAge(updatedStudent.getAge());
-                student.setCourse(updatedStudent.getCourse());
-
-                return student;
-            }
+        if (existingStudent.isEmpty()) {
+            return null;
         }
 
-        return null;
+        Student student = existingStudent.get();
+
+        student.setName(updatedStudent.getName());
+        student.setEmail(updatedStudent.getEmail());
+        student.setAge(updatedStudent.getAge());
+        student.setCourse(updatedStudent.getCourse());
+
+        return studentRepository.save(student);
     }
 
     @Override
-    public boolean deleteStudent(int id) {
+    public boolean deleteStudent(String id) {
 
-        Iterator<Student> iterator = students.iterator();
-
-        while (iterator.hasNext()) {
-
-            Student student = iterator.next();
-
-            if (student.getId() == id) {
-
-                iterator.remove();
-
-                return true;
-            }
+        if (!studentRepository.existsById(id)) {
+            return false;
         }
 
-        return false;
+        studentRepository.deleteById(id);
+
+        return true;
     }
 }
