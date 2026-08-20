@@ -1,4 +1,4 @@
-# 🎓 Student Management System - Backend REST API
+# Student Management System - Backend REST API
 
 [![Java Version](https://img.shields.io/badge/Java-21%20%2F%2026-orange.svg?logo=openjdk)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.0-brightgreen.svg?logo=springboot)](https://spring.io/projects/spring-boot)
