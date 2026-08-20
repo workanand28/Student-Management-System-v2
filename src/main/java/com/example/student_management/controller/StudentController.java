@@ -2,19 +2,15 @@ package com.example.student_management.controller;
 
 import com.example.student_management.model.Student;
 import com.example.student_management.service.StudentService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
@@ -23,13 +19,15 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/students")
-    public List<Student> getAllStudents() {
+    @GetMapping
+    public ResponseEntity<List<Student>> getAllStudents() {
 
-        return studentService.getAllStudents();
+        return ResponseEntity.ok(
+                studentService.getAllStudents()
+        );
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(
             @PathVariable String id) {
 
@@ -43,24 +41,31 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @GetMapping("/students/search")
-    public List<Student> getStudentsByName(
+    @GetMapping("/search")
+    public ResponseEntity<List<Student>> getStudentsByName(
             @RequestParam String name) {
 
-        return studentService.getStudentsByName(name);
+        return ResponseEntity.ok(
+                studentService.getStudentsByName(name)
+        );
     }
 
-    @PostMapping("/students")
-    public Student createStudent(
-            @RequestBody Student student) {
+    @PostMapping
+    public ResponseEntity<Student> createStudent(
+            @Valid @RequestBody Student student) {
 
-        return studentService.createStudent(student);
+        Student savedStudent =
+                studentService.createStudent(student);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(savedStudent);
     }
 
-    @PutMapping("/students/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(
             @PathVariable String id,
-            @RequestBody Student updatedStudent) {
+            @Valid @RequestBody Student updatedStudent) {
 
         Student student =
                 studentService.updateStudent(
@@ -75,7 +80,7 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @DeleteMapping("/students/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(
             @PathVariable String id) {
 

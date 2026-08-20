@@ -39,7 +39,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student createStudent(Student student) {
-
+        if (student.getId() != null && student.getId().trim().isEmpty()) {
+            student.setId(null);
+        }
         return studentRepository.save(student);
     }
 
