@@ -10,17 +10,17 @@ A robust, production-ready RESTful Backend API for managing student records, bui
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [Architecture & Design](#-architecture--design)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Features & Validation Rules](#-features--validation-rules)
-- [Prerequisites](#-prerequisites)
-- [Configuration & Environment](#-configuration--environment)
-- [Getting Started](#-getting-started)
-- [API Documentation](#-api-documentation)
+- [Overview](#overview)
+- [Architecture & Design](#architecture--design)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Features & Validation Rules](#features--validation-rules)
+- [Prerequisites](#prerequisites)
+- [Configuration & Environment](#configuration--environment)
+- [Getting Started](#getting-started)
+- [API Documentation](#api-documentation)
   - [Health Check](#1-health-check)
   - [Get All Students](#2-get-all-students)
   - [Get Student by ID](#3-get-student-by-id)
@@ -28,18 +28,19 @@ A robust, production-ready RESTful Backend API for managing student records, bui
   - [Create Student](#5-create-student)
   - [Update Student](#6-update-student)
   - [Delete Student](#7-delete-student)
-- [Running Automated Tests](#-running-automated-tests)
-- [Contributing](#-contributing)
+- [Running Automated Tests](#running-automated-tests)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## 🌟 Overview
+## Overview
 
 The **Student Management System Backend** provides full CRUD (Create, Read, Update, Delete) capabilities alongside advanced search features for student data management. It connects seamlessly to MongoDB Atlas and enforces validation constraints on all incoming data payloads.
 
 ---
 
-## 🏛 Architecture & Design
+## Architecture & Design
 
 The application follows a **Layered Architecture** with strict separation of concerns:
 
@@ -61,7 +62,7 @@ The application follows a **Layered Architecture** with strict separation of con
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 - **Framework**: Spring Boot 4.x / Spring Web MVC
 - **Database**: MongoDB / MongoDB Atlas Cloud
@@ -73,7 +74,7 @@ The application follows a **Layered Architecture** with strict separation of con
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 student-management/
@@ -105,7 +106,7 @@ student-management/
 
 ---
 
-## 🛡 Features & Validation Rules
+## Features & Validation Rules
 
 - **Input Validation**: Automatically validated on `POST` and `PUT` requests:
   - `name`: Must not be blank (`@NotBlank`).
@@ -118,7 +119,7 @@ student-management/
 
 ---
 
-## ⚙️ Prerequisites
+## Prerequisites
 
 Before running the application, ensure you have:
 
@@ -128,7 +129,7 @@ Before running the application, ensure you have:
 
 ---
 
-## 🔧 Configuration & Environment
+## Configuration & Environment
 
 Configuration is maintained in [`src/main/resources/application.properties`](src/main/resources/application.properties):
 
@@ -144,14 +145,14 @@ spring.data.mongodb.uri=mongodb+srv://<username>:<password>@<cluster-address>/st
 spring.data.mongodb.database=student-management
 ```
 
-> 🔒 **Security Tip**: Never commit real database passwords to public repositories. You can pass the URI as an environment variable:
+> **Security Tip**: Never commit real database passwords to public repositories. You can pass the URI as an environment variable:
 > ```bash
 > export SPRING_DATA_MONGODB_URI="mongodb+srv://user:pass@cluster.mongodb.net/student-management"
 > ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the Repository
 ```bash
@@ -184,7 +185,7 @@ The application will start on **`http://localhost:8080`**.
 
 ---
 
-## 📡 API Documentation
+## API Documentation
 
 ### Base URL
 `http://localhost:8080`
@@ -324,7 +325,7 @@ The application will start on **`http://localhost:8080`**.
 
 ---
 
-## 🧪 Running Automated Tests
+## Running Automated Tests
 
 Integration tests verify Spring context loading, Mongo connection, and full repository lifecycle (Insert, Query, Search, Delete):
 
@@ -338,7 +339,7 @@ Integration tests verify Spring context loading, Mongo connection, and full repo
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -348,6 +349,6 @@ Integration tests verify Spring context loading, Mongo connection, and full repo
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - feel free to use and adapt it for your own learning and production projects!
