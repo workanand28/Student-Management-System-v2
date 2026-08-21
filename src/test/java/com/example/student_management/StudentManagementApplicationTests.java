@@ -1,6 +1,6 @@
 package com.example.student_management;
 
-import com.example.student_management.model.Student;
+import com.example.student_management.entity.Student;
 import com.example.student_management.repository.StudentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

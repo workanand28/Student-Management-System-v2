@@ -1,6 +1,7 @@
 package com.example.student_management.controller;
 
-import com.example.student_management.model.Student;
+import com.example.student_management.dto.StudentRequestDTO;
+import com.example.student_management.dto.StudentResponseDTO;
 import com.example.student_management.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,15 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(
+            StudentService studentService) {
+
         this.studentService = studentService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentResponseDTO>>
+    getAllStudents() {
 
         return ResponseEntity.ok(
                 studentService.getAllStudents()
@@ -28,10 +32,11 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(
+    public ResponseEntity<StudentResponseDTO>
+    getStudentById(
             @PathVariable String id) {
 
-        Student student =
+        StudentResponseDTO student =
                 studentService.getStudentById(id);
 
         if (student == null) {
@@ -42,7 +47,8 @@ public class StudentController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Student>> getStudentsByName(
+    public ResponseEntity<List<StudentResponseDTO>>
+    getStudentsByName(
             @RequestParam String name) {
 
         return ResponseEntity.ok(
@@ -51,11 +57,12 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(
-            @Valid @RequestBody Student student) {
+    public ResponseEntity<StudentResponseDTO>
+    createStudent(
+            @Valid @RequestBody StudentRequestDTO requestDTO) {
 
-        Student savedStudent =
-                studentService.createStudent(student);
+        StudentResponseDTO savedStudent =
+                studentService.createStudent(requestDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -63,21 +70,22 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(
+    public ResponseEntity<StudentResponseDTO>
+    updateStudent(
             @PathVariable String id,
-            @Valid @RequestBody Student updatedStudent) {
+            @Valid @RequestBody StudentRequestDTO requestDTO) {
 
-        Student student =
+        StudentResponseDTO updatedStudent =
                 studentService.updateStudent(
                         id,
-                        updatedStudent
+                        requestDTO
                 );
 
-        if (student == null) {
+        if (updatedStudent == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(updatedStudent);
     }
 
     @DeleteMapping("/{id}")

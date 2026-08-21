@@ -1,22 +1,23 @@
 package com.example.student_management.service;
 
-import com.example.student_management.model.Student;
+
+import com.example.student_management.dto.*;
 
 import java.util.List;
 
 public interface StudentService {
 
-    List<Student> getAllStudents();
+    List<StudentResponseDTO> getAllStudents();
 
-    Student getStudentById(String id);
+    StudentResponseDTO getStudentById(String id);
 
-    List<Student> getStudentsByName(String name);
+    List<StudentResponseDTO> getStudentsByName(String name);
 
-    Student createStudent(Student student);
+    StudentResponseDTO createStudent(StudentRequestDTO requestDTO);
 
-    Student updateStudent(
+    StudentResponseDTO updateStudent(
             String id,
-            Student updatedStudent);
+            StudentRequestDTO requestDTO);
 
     boolean deleteStudent(String id);
 }

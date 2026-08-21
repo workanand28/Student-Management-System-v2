@@ -1,8 +1,7 @@
-package com.example.student_management.model;
+package com.example.student_management.entity;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,17 +11,16 @@ public class Student {
     @Id
     private String id;
 
-    @NotBlank(message = "Name is required")
+  
     private String name;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email must be valid")
+
     private String email;
 
-    @Min(value = 18, message = "Age must be at least 18")
+
     private int age;
 
-    @NotBlank(message = "Course is required")
+
     private String course;
 
     public Student() {

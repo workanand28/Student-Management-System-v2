@@ -1,54 +1,75 @@
 package com.example.student_management.service;
 
-import com.example.student_management.model.Student;
+import com.example.student_management.dto.StudentRequestDTO;
+import com.example.student_management.dto.StudentResponseDTO;
+import com.example.student_management.entity.Student;
 import com.example.student_management.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class StudentServiceImpl implements StudentService {
+public class StudentServiceImpl
+        implements StudentService {
 
     private final StudentRepository studentRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public StudentServiceImpl(
+            StudentRepository studentRepository) {
+
         this.studentRepository = studentRepository;
     }
 
     @Override
-    public List<Student> getAllStudents() {
+    public List<StudentResponseDTO> getAllStudents() {
 
-        return studentRepository.findAll();
+        return studentRepository.findAll()
+                .stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Student getStudentById(String id) {
+    public StudentResponseDTO getStudentById(
+            String id) {
 
         Optional<Student> student =
                 studentRepository.findById(id);
 
-        return student.orElse(null);
+        return student
+                .map(this::convertToResponseDTO)
+                .orElse(null);
     }
 
     @Override
-    public List<Student> getStudentsByName(String name) {
+    public List<StudentResponseDTO> getStudentsByName(
+            String name) {
 
-        return studentRepository.findByNameIgnoreCase(name);
+        return studentRepository
+                .findByNameIgnoreCase(name)
+                .stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Student createStudent(Student student) {
-        if (student.getId() != null && student.getId().trim().isEmpty()) {
-            student.setId(null);
-        }
-        return studentRepository.save(student);
+    public StudentResponseDTO createStudent(
+            StudentRequestDTO requestDTO) {
+
+        Student student = convertToEntity(requestDTO);
+
+        Student savedStudent =
+                studentRepository.save(student);
+
+        return convertToResponseDTO(savedStudent);
     }
 
     @Override
-    public Student updateStudent(
+    public StudentResponseDTO updateStudent(
             String id,
-            Student updatedStudent) {
+            StudentRequestDTO requestDTO) {
 
         Optional<Student> existingStudent =
                 studentRepository.findById(id);
@@ -59,12 +80,15 @@ public class StudentServiceImpl implements StudentService {
 
         Student student = existingStudent.get();
 
-        student.setName(updatedStudent.getName());
-        student.setEmail(updatedStudent.getEmail());
-        student.setAge(updatedStudent.getAge());
-        student.setCourse(updatedStudent.getCourse());
+        student.setName(requestDTO.getName());
+        student.setEmail(requestDTO.getEmail());
+        student.setAge(requestDTO.getAge());
+        student.setCourse(requestDTO.getCourse());
 
-        return studentRepository.save(student);
+        Student updatedStudent =
+                studentRepository.save(student);
+
+        return convertToResponseDTO(updatedStudent);
     }
 
     @Override
@@ -77,5 +101,30 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(id);
 
         return true;
+    }
+
+    private Student convertToEntity(
+            StudentRequestDTO requestDTO) {
+
+        Student student = new Student();
+
+        student.setName(requestDTO.getName());
+        student.setEmail(requestDTO.getEmail());
+        student.setAge(requestDTO.getAge());
+        student.setCourse(requestDTO.getCourse());
+
+        return student;
+    }
+
+    private StudentResponseDTO convertToResponseDTO(
+            Student student) {
+
+        return new StudentResponseDTO(
+                student.getId(),
+                student.getName(),
+                student.getEmail(),
+                student.getAge(),
+                student.getCourse()
+        );
     }
 }
