@@ -11,15 +11,16 @@ public class Student {
     @Id
     private String id;
 
-  
+    @NotBlank(message = "Name is required")
     private String name;
 
-
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
     private String email;
 
-
+    @Min(value = 18, message = "Age must be at least 18")
+    @Max(value = 100, message = "Age cannot exceed 100")
     private int age;
-
 
     private String course;
 
