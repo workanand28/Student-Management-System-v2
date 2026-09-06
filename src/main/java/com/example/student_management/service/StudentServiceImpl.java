@@ -3,6 +3,7 @@ package com.example.student_management.service;
 import com.example.student_management.dto.StudentRequestDTO;
 import com.example.student_management.dto.StudentResponseDTO;
 import com.example.student_management.entity.Student;
+import com.example.student_management.exception.StudentNotFoundException;
 import com.example.student_management.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class StudentServiceImpl
-        implements StudentService {
+public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
 
-    public StudentServiceImpl(
-            StudentRepository studentRepository) {
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
 
         this.studentRepository = studentRepository;
     }
@@ -32,15 +32,16 @@ public class StudentServiceImpl
     }
 
     @Override
-    public StudentResponseDTO getStudentById(
-            String id) {
+    public StudentResponseDTO getStudentById(String id) {
 
-        Optional<Student> student =
-                studentRepository.findById(id);
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student not found with id: " + id
+                        )
+                );
 
-        return student
-                .map(this::convertToResponseDTO)
-                .orElse(null);
+        return convertToResponseDTO(student);
     }
 
     @Override
@@ -71,14 +72,12 @@ public class StudentServiceImpl
             String id,
             StudentRequestDTO requestDTO) {
 
-        Optional<Student> existingStudent =
-                studentRepository.findById(id);
-
-        if (existingStudent.isEmpty()) {
-            return null;
-        }
-
-        Student student = existingStudent.get();
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student not found with id: " + id
+                        )
+                );
 
         student.setName(requestDTO.getName());
         student.setEmail(requestDTO.getEmail());
@@ -95,7 +94,9 @@ public class StudentServiceImpl
     public boolean deleteStudent(String id) {
 
         if (!studentRepository.existsById(id)) {
-            return false;
+            throw new StudentNotFoundException(
+                    "Student not found with id: " + id
+            );
         }
 
         studentRepository.deleteById(id);
